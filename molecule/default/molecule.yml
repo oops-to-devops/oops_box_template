@@ -64,6 +64,13 @@ platforms:
       box: ubuntu/xenial64
       memory: 4096
       cpus: 2
+      groups:
+        - oops_box
+      # optional - box is accesible from your real network
+#      interfaces:
+#        - network_name: private_network
+#          type: dhcp
+#          auto_config: true
 
 
   # - name: centos7
@@ -110,11 +117,12 @@ provisioner:
   config_options:
     defaults:
       callback_whitelist: profile_roles,profile_tasks,timer
+  #    roles_path: "roles:../../roles"
   # playbooks:
   #   create: ../../../../../resources/playbooks/vagrant/create.yml
   #   destroy: ../../../../../resources/playbooks/vagrant/destroy.yml
-  # env:
-  #   ANSIBLE_ROLES_PATH: ../../../../../resources/roles/
+    env:
+      ANSIBLE_ROLES_PATH: "roles:../../roles"
   lint:
     name: ansible-lint
 verifier:

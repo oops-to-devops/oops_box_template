@@ -9,8 +9,8 @@ WORKSPACE=$(
 BOX_PLAYBOOK=$WORKSPACE/playbook.yml
 BOX_NAME=${BOX_NAME:-unnamed_oops_box}
 BOX_ADDRESS=$REMOTE_HOST
-BOX_USER=$REMOTE_USER_INITIAL
-BOX_PWD=$REMOTE_PASSWORD_INITIAL
+BOX_USER=$BOX_DEPLOY_USER
+BOX_PWD=$BOX_DEPLOY_PASS
 BOX_PROVIDER=${BOX_PROVIDER:-}
 ENVIRONMENT=${ENVIRONMENT:-default}
 BOX_TARGET=${BOX_TARGET:-$(grep "hosts:" $BOX_PLAYBOOK | head -1 | awk {'print $3'})}
@@ -51,20 +51,15 @@ trap 'rm -rf ${TMP_OUTPUT} ${TMP_INVENTORY}' \
 if [[ -d $BOX_ADDRESS ]]; then
     echo "$BOX_ADDRESS supposed to be directory based inventory"
 		BOX_INVENTORY=$BOX_ADDRESS
-elif [[ -f $PASSED ]]; then
+elif [[ -f $BOX_ADDRESS ]]; then
     echo "$BOX_ADDRESS supposed to be file based inventory"
 		BOX_INVENTORY=$BOX_ADDRESS
 else
     echo "$BOX_ADDRESS supposed to be direct address of the host, generating temporary inventory"
- 		BOX_INVENTORY=$TMP_INVENTORY
-		echo "[${BOX_TARGET}]" > $TMP_INVENTORY
-  	echo "${$BOX_ADDRESS} ansible_user=${BOX_USER} ansible_password=${BOX_PWD}" >> $TMP_INVENTORY
-fi
-
-if [ -f "$BOX_ADDRESS" ]; then
-    echo "$FILE exist"
-else
-    echo "$FILE does not exist"
+    BOX_INVENTORY=$TMP_INVENTORY
+    echo "[${BOX_TARGET}]" > $TMP_INVENTORY
+    echo "${BOX_ADDRESS} ansible_user=${BOX_USER} ansible_password=${BOX_PWD}" >> $TMP_INVENTORY
+    cat $TMP_INVENTORY
 fi
 
 ansible-playbook $BOX_PLAYBOOK \

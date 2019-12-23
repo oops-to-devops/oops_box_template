@@ -12,19 +12,19 @@
     - set_fact:
         remote_ip_address: "{{ ansible_host }}"
 
-    - include_vars: "{{ shared_dir }}/common_vars.yml"
+    - include_vars: "defaults/main.yml"
 
     - name: ANSIBLE PYTHON | install fallback python if needed
-      raw: test -e /usr/bin/python || /usr/bin/python3 || (apt -qqy update && apt install -qy python-minimal)
+      raw: test -e /usr/bin/python || test -e /usr/bin/python3 || (apt -qqy update && apt install -qy python-minimal)
       become: yes
+
+    - name: gather facts
+      setup:
 
     - name:  UNPRIVILEGED USERS | Get acl dependency (ansible unprivileged user operations magic)
       apt: pkg="acl"
       become: yes
       when: ansible_os_family == 'Debian'
-
-    - name: gather facts
-      setup:
 
     - name: Check for common pretasks
       local_action: stat path="{{ shared_dir }}/common_pretasks.yml"

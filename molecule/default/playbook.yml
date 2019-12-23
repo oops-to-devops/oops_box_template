@@ -13,3 +13,7 @@
       include_vars: "playbook_vars.yml"
 
   roles: []
+
+#- name: Apply box play
+#  import_playbook: ../../playbook.yml
+

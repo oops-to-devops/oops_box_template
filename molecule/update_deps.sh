@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pip freeze | grep -E "molecule|ansible" > requirements-dev.txt
+pip freeze | grep -E "molecule|ansible|virtualenvwrapper" > requirements-dev.txt

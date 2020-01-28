@@ -6,3 +6,9 @@ local_*.sh
 releases
 __pycache__
 *.pyc
+roles/**/box-example
+roles/**/molecule
+roles/**/tests/
+roles/**/meta
+roles/**/.travis.yml
+
